@@ -1,7 +1,18 @@
 package main
 
+import "sync"
+
 func main() {
-	fname := "./bilder/DSC03328.JPG"
-	pic := createPicture(fname)
-	pic.createThumbnails()
+	album := getAlbums()
+
+	var wg sync.WaitGroup
+	wg.Add(len(album))
+
+	for _, v := range album {
+		go func(v Album) {
+			defer wg.Done()
+			v.writeAlbumCache()
+		}(v)
+	}
+	wg.Wait()
 }

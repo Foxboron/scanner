@@ -1,34 +1,32 @@
 package main
 
 import (
-	"bytes"
 	"log"
 
 	"github.com/rwcarlsen/goexif/exif"
 )
 
 type exifData struct {
-	cacheName            string    `json:"cacheName"`
-	exposureTime         []float64 `json:"exposureTime"`
-	name                 string    `json:"name"`
-	focalLength          []float64 `json:"focalLength"`
-	make                 string    `json:"make"`
-	mediaType            string    `json:"mediaType"`
-	dateTime             string    `json:"dateTime"`
-	aperture             []float64 `json:"aperture"`
-	exposureCompensation []float64 `json:"exposureCompensation"`
-	iso                  []int     `json:"iso"`
-	dateTimeOriginal     string    `json:"dateTimeOriginal"`
-	date                 string    `json:"date"`
-	model                string    `json:"model"`
-	size                 []int     `json:"size"`
-	dateTimeFile         string    `json:"dateTimeFile"`
-	orientation          string    `json:"orientation"`
+	CacheName            string    `json:"cacheName"`
+	ExposureTime         []float64 `json:"exposureTime"`
+	Name                 string    `json:"name"`
+	FocalLength          []float64 `json:"focalLength"`
+	Make                 string    `json:"make"`
+	MediaType            string    `json:"mediaType"`
+	DateTime             string    `json:"dateTime"`
+	Aperture             []float64 `json:"aperture"`
+	ExposureCompensation []float64 `json:"exposureCompensation"`
+	Iso                  []int     `json:"iso"`
+	DateTimeOriginal     string    `json:"dateTimeOriginal"`
+	Date                 string    `json:"date"`
+	Model                string    `json:"model"`
+	Size                 []int     `json:"size"`
+	DateTimeFile         string    `json:"dateTimeFile"`
+	Orientation          string    `json:"orientation"`
 }
 
-func (picture *Picture) returnExif() exifData {
-	content := picture.getPictureContent()
-	r := bytes.NewReader(content)
+func (picture *Picture) getExif() exifData {
+	r := picture.getPictureReader()
 	x, err := exif.Decode(r)
 	if err != nil {
 		log.Fatal(err)
@@ -105,27 +103,27 @@ func (picture *Picture) returnExif() exifData {
 	switch {
 	case orientationVal == 1:
 		orientation = "Horizontal (normal)"
-	case orientationVal == 0:
+	case orientationVal == 8:
 		orientation = "Vertical (normal)"
 	}
 
 	return exifData{
-		cacheName:            cacheName,
-		name:                 picture.name,
-		model:                camModel,
-		make:                 make,
-		mediaType:            mediaType,
-		dateTimeOriginal:     dateTimeOriginal,
-		dateTimeFile:         dateTimeFile,
-		dateTime:             dateTime,
-		orientation:          orientation,
-		exposureTime:         exposureTime,
-		focalLength:          focalLength,
-		aperture:             aperture,
-		exposureCompensation: exposureCompensation,
-		iso:                  iso,
-		date:                 date,
-		size:                 size,
+		CacheName:            cacheName,
+		Name:                 picture.name,
+		Model:                camModel,
+		Make:                 make,
+		MediaType:            mediaType,
+		DateTimeOriginal:     dateTimeOriginal,
+		DateTimeFile:         dateTimeFile,
+		DateTime:             dateTime,
+		Orientation:          orientation,
+		ExposureTime:         exposureTime,
+		FocalLength:          focalLength,
+		Aperture:             aperture,
+		ExposureCompensation: exposureCompensation,
+		Iso:                  iso,
+		Date:                 date,
+		Size:                 size,
 	}
 
 }
